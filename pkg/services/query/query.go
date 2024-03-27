@@ -88,7 +88,7 @@ func (s *ServiceImpl) Run(ctx context.Context) error {
 // QueryData processes queries and returns query responses. It handles queries to single or mixed datasources, as well as expressions.
 func (s *ServiceImpl) QueryData(ctx context.Context, user identity.Requester, skipDSCache bool, reqDTO dtos.MetricRequest) (*backend.QueryDataResponse, error) {
 	// Parse the request into parsed queries grouped by datasource uid
-	parsedReq, err := s.parseMetricRequest(ctx, user, skipDSCache, reqDTO)
+	parsedReq, err := s.parseMetricRequest(ctx, user, skipDSCache, reqDTO) //{hasExpression: false, parsedQueries: map[string][]*backend.DataQuery{}, dsTypes: map[string]string{}}
 	if err != nil {
 		return nil, err
 	}
@@ -241,7 +241,7 @@ func (s *ServiceImpl) handleExpressions(ctx context.Context, user identity.Reque
 
 // handleQuerySingleDatasource handles one or more queries to a single datasource
 func (s *ServiceImpl) handleQuerySingleDatasource(ctx context.Context, user identity.Requester, parsedReq *parsedRequest) (*backend.QueryDataResponse, error) {
-	queries := parsedReq.getFlattenedQueries()
+	queries := parsedReq.getFlattenedQueries() //Since here we only handle one datasource, we can simply flatten the map
 	ds := queries[0].datasource
 	if err := s.pluginRequestValidator.Validate(ds.URL, nil); err != nil {
 		return nil, datasources.ErrDataSourceAccessDenied
@@ -253,7 +253,7 @@ func (s *ServiceImpl) handleQuerySingleDatasource(ctx context.Context, user iden
 			return nil, fmt.Errorf("all queries must have the same datasource - found %s and %s", ds.UID, pq.datasource.UID)
 		}
 	}
-
+	//construct the context info passed to the plugin
 	pCtx, err := s.pCtxProvider.GetWithDataSource(ctx, ds.Type, user, ds)
 	if err != nil {
 		return nil, err
@@ -319,7 +319,7 @@ func (s *ServiceImpl) parseMetricRequest(ctx context.Context, user identity.Requ
 				TimeRange: backend.TimeRange{
 					From: timeRange.GetFromAsTimeUTC(),
 					To:   timeRange.GetToAsTimeUTC(),
-				},
+				}, //Get the refId from the query. If the query doesn't have a refId, use "A"'
 				RefID:         query.Get("refId").MustString("A"),
 				MaxDataPoints: query.Get("maxDataPoints").MustInt64(100),
 				Interval:      time.Duration(query.Get("intervalMs").MustInt64(1000)) * time.Millisecond,

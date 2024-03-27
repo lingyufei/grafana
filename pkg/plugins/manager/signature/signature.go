@@ -48,7 +48,7 @@ func (s *Validation) ValidateSignature(plugin *plugins.Plugin) error {
 			}
 		}
 	}
-
+	//Internal plugins are not needed to have a signature
 	if plugin.IsCorePlugin() || plugin.IsBundledPlugin() {
 		return nil
 	}

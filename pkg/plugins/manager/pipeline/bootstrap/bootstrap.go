@@ -73,7 +73,7 @@ func (b *Bootstrap) Bootstrap(ctx context.Context, src plugins.PluginSource, fou
 	for _, p := range ps {
 		var ip *plugins.Plugin
 		stepFailed := false
-		for _, decorate := range b.decorateSteps {
+		for _, decorate := range b.decorateSteps { //Check/modify the info of plugins iteratively
 			ip, err = decorate(ctx, p)
 			if err != nil {
 				stepFailed = true

@@ -53,7 +53,7 @@ func DirAsLocalSources(pluginsPath string, class plugins.Class) ([]*LocalSource,
 	if err != nil {
 		return []*LocalSource{}, errors.New("failed to open plugins path")
 	}
-
+	//get all dirs under the pluginsPath
 	var pluginDirs []string
 	for _, dir := range d {
 		if dir.IsDir() || dir.Type()&os.ModeSymlink == os.ModeSymlink {

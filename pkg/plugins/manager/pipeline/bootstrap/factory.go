@@ -34,7 +34,7 @@ func (f *DefaultPluginFactory) createPlugin(p plugins.FoundPlugin, class plugins
 	if err != nil {
 		return nil, fmt.Errorf("module url: %w", err)
 	}
-	plugin := &plugins.Plugin{
+	plugin := &plugins.Plugin{ //create the basic info of a plugin
 		JSONData:      p.JSONData,
 		Class:         class,
 		FS:            p.FS,

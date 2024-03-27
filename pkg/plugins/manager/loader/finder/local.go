@@ -118,7 +118,7 @@ func (l *Local) Find(ctx context.Context, src plugins.PluginSource) ([]*plugins.
 			if dir == dir2 {
 				continue
 			}
-
+			//check if the plugin is in another plugin's dir
 			relPath, err := filepath.Rel(dir, dir2)
 			if err != nil {
 				l.log.Error("Cannot calculate relative path. Skipping", "pluginId", p2.Primary.JSONData.ID, "err", err)

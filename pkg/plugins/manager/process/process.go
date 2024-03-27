@@ -46,10 +46,11 @@ func (*Service) Stop(ctx context.Context, p *plugins.Plugin) error {
 }
 
 func (s *Service) startPluginAndKeepItAlive(ctx context.Context, p *plugins.Plugin) error {
+	//Internal plugins don't need to be started additionally for they start along with Grafana.
+	//So their Start is an empty function.
 	if err := p.Start(ctx); err != nil {
 		return err
 	}
-
 	if p.IsCorePlugin() {
 		return nil
 	}

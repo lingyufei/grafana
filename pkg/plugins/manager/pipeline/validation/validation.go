@@ -49,7 +49,7 @@ func (v *Validate) Validate(ctx context.Context, ps []*plugins.Plugin) ([]*plugi
 	for _, p := range ps {
 		stepFailed := false
 		for _, validate := range v.validateSteps {
-			err := validate(ctx, p)
+			err := validate(ctx, p) //signature + moduleJS + angular validation
 			if err != nil {
 				stepFailed = true
 				v.log.Error("Plugin validation failed", "pluginId", p.ID, "error", err)

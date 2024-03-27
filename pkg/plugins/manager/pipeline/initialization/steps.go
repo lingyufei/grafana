@@ -105,7 +105,7 @@ func newPluginRegistration(pluginRegistry registry.Service) *PluginRegistration 
 
 // Initialize registers the plugin with the plugin registry.
 func (r *PluginRegistration) Initialize(ctx context.Context, p *plugins.Plugin) (*plugins.Plugin, error) {
-	if err := r.pluginRegistry.Add(ctx, p); err != nil {
+	if err := r.pluginRegistry.Add(ctx, p); err != nil { //Add the plugin into the plugin registry / cache
 		r.log.Error("Could not register plugin", "pluginId", p.ID, "error", err)
 		return nil, err
 	}

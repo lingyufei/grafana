@@ -21,6 +21,7 @@ type corePlugin struct {
 }
 
 // New returns a new backendplugin.PluginFactoryFunc for creating a core (built-in) backendplugin.Plugin.
+// It seems that the core plugin uses the internal default CheckHealthHandler, CallResourceHandler, QueryDataHandler, StreamHandler
 func New(opts backend.ServeOpts) backendplugin.PluginFactoryFunc {
 	return func(pluginID string, logger log.Logger, _ func() []string) (backendplugin.Plugin, error) {
 		return &corePlugin{

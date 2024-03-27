@@ -21,12 +21,13 @@ func ProvideService(cfg *setting.Cfg) *Service {
 	}
 }
 
+// List gets a list of all available plugin paths
 func (s *Service) List(_ context.Context) []plugins.PluginSource {
 	r := []plugins.PluginSource{
-		NewLocalSource(plugins.ClassCore, corePluginPaths(s.cfg.StaticRootPath)),
+		NewLocalSource(plugins.ClassCore, corePluginPaths(s.cfg.StaticRootPath)), //generate both panel and datasource path
 		NewLocalSource(plugins.ClassBundled, []string{s.cfg.BundledPluginsPath}),
 	}
-	r = append(r, s.externalPluginSources()...)
+	r = append(r, s.externalPluginSources()...) //add external plugins
 	r = append(r, s.pluginSettingSources()...)
 	return r
 }
