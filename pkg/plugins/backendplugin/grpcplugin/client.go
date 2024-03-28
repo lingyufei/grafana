@@ -43,7 +43,7 @@ func newClientConfig(executablePath string, args []string, env []string, skipHos
 	versionedPlugins map[int]goplugin.PluginSet) *goplugin.ClientConfig {
 	// We can ignore gosec G201 here, since the dynamic part of executablePath comes from the plugin definition
 	// nolint:gosec
-	cmd := exec.Command(executablePath, args...)
+	cmd := exec.Command(executablePath, args...) //Construct a cmd for starting up the plugin process: /data/plugins/redis-datasource/redis-datasource_darwin_arm64
 	cmd.Env = env
 
 	return &goplugin.ClientConfig{

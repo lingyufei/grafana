@@ -37,7 +37,7 @@ func New(discovery discovery.Discoverer, bootstrap bootstrap.Bootstrapper, valid
 }
 
 func (l *Loader) Load(ctx context.Context, src plugins.PluginSource) ([]*plugins.Plugin, error) {
-	end := l.instrumentLoad(ctx, src)
+	end := l.instrumentLoad(ctx, src) //a time logger wrapper to calculate and log the duration of the loading process
 
 	discoveredPlugins, err := l.discovery.Discover(ctx, src)
 	if err != nil {
@@ -68,6 +68,7 @@ func (l *Loader) Unload(ctx context.Context, p *plugins.Plugin) (*plugins.Plugin
 	return l.termination.Terminate(ctx, p)
 }
 
+// A logger wrapper to calculate and log the duration of the loading process.
 func (l *Loader) instrumentLoad(ctx context.Context, src plugins.PluginSource) func([]*plugins.Plugin) {
 	start := time.Now()
 	sourceLogger := l.log.New("source", src.PluginClass(ctx)).FromContext(ctx)
