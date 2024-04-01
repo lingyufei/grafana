@@ -126,6 +126,7 @@ var lexTests = []lexTest{
 	{"invalid curly var", "${adf sd", []item{
 		{itemError, 0, "unterminated variable missing closing }"},
 	}},
+	//{"calculate with priority", "($A+1)*$B", []item{tEOF}},
 }
 
 // collect gathers the emitted items into a slice.
