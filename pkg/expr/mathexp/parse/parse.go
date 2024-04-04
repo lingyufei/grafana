@@ -33,7 +33,7 @@ type Func struct {
 	Args          []ReturnType
 	Return        ReturnType
 	F             interface{}
-	VariantReturn bool
+	VariantReturn bool //VariantReturn mean that the return type is the same with the argument type.
 	Check         func(*Tree, *FuncNode) error
 }
 
@@ -321,6 +321,10 @@ func (t *Tree) Func() (f *FuncNode) {
 			node := t.O()
 			f.append(node)
 			if len(f.Args) == 1 && f.F.VariantReturn {
+				//If VariantReturn is true and there is only one argument,
+				//we could make sure that the return type of the func is the same as the argument type.
+				//Then we set the return type of the func to the return type of the argument.
+				//It's because we cannot determine the return type which is variable and is based on the argument type.
 				f.F.Return = node.Return()
 			}
 		case itemString:
