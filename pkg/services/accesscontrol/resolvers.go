@@ -57,10 +57,10 @@ func (s *Resolvers) GetScopeAttributeMutator(orgID int64) ScopeAttributeMutator 
 			s.log.Debug("Used cache to resolve scope", "scope", scope, "resolved_scopes", scopes)
 			return scopes, nil
 		}
-
+		//get the prefix of the scope. dashboards:uid:cdivta4msgkjkb -> dashboards:uid
 		prefix := ScopePrefix(scope)
 		if resolver, ok := s.attributeResolvers[prefix]; ok {
-			scopes, err := resolver.Resolve(ctx, orgID, scope)
+			scopes, err := resolver.Resolve(ctx, orgID, scope) //get the whole scopes. [dashboards:uid:cdivta4msgkjkb, folders:uid:ddivt8pvw80e8c]
 			if err != nil {
 				return nil, fmt.Errorf("could not resolve %v: %w", scope, err)
 			}

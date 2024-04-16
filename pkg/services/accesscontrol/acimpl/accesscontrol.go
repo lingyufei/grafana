@@ -54,7 +54,7 @@ func (a *AccessControl) Evaluate(ctx context.Context, user identity.Requester, e
 	if evaluator.Evaluate(permissions) {
 		return true, nil
 	}
-
+	//evaluate if the user can access the folder
 	resolvedEvaluator, err := evaluator.MutateScopes(ctx, a.resolvers.GetScopeAttributeMutator(user.GetOrgID()))
 	if err != nil {
 		if errors.Is(err, accesscontrol.ErrResolverNotFound) {

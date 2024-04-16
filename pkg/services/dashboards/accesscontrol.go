@@ -163,11 +163,12 @@ func NewDashboardUIDScopeResolver(folderDB folder.FolderStore, ds DashboardServi
 		if err != nil {
 			return nil, err
 		}
-
+		//get the whole scopes for the dashboard with scopes of the ancestor folders.
 		return resolveDashboardScope(ctx, folderDB, orgID, dashboard, folderSvc)
 	})
 }
 
+// get the folder scopes and the dashboard scopes for the dashboard.
 func resolveDashboardScope(ctx context.Context, folderDB folder.FolderStore, orgID int64, dashboard *Dashboard, folderSvc folder.Service) ([]string, error) {
 	var folderUID string
 	metrics.MFolderIDsServiceCount.WithLabelValues(metrics.Dashboard).Inc()
@@ -206,7 +207,7 @@ func resolveDashboardScope(ctx context.Context, folderDB folder.FolderStore, org
 func GetInheritedScopes(ctx context.Context, orgID int64, folderUID string, folderSvc folder.Service) ([]string, error) {
 	if folderUID == ac.GeneralFolderUID {
 		return nil, nil
-	}
+	} //get all the ancestor folders of the folder
 	ancestors, err := folderSvc.GetParents(ctx, folder.GetParentsQuery{
 		UID:   folderUID,
 		OrgID: orgID,
@@ -220,7 +221,7 @@ func GetInheritedScopes(ctx context.Context, orgID int64, folderUID string, fold
 	}
 
 	result := make([]string, 0, len(ancestors))
-	for _, ff := range ancestors {
+	for _, ff := range ancestors { //compose the scope for each ancestor folder
 		result = append(result, ScopeFoldersProvider.GetResourceScopeUID(ff.UID))
 	}
 
